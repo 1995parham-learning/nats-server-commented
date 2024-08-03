@@ -927,7 +927,8 @@ func (s *Server) setJetStreamExportSubs() error {
 		return err
 	}
 
-	// API handles themselves.
+	// API handles themselves. For each subject we have corresponding
+	// handler.
 	pairs := []struct {
 		subject string
 		handler msgHandler
@@ -1302,7 +1303,7 @@ func (s *Server) jsTemplateInfoRequest(sub *subscription, c *client, _ *Account,
 	streams := t.streams
 	if streams == nil {
 		streams = []string{}
-	}
+	
 	t.mu.Unlock()
 
 	resp.StreamTemplateInfo = &StreamTemplateInfo{Config: cfg, Streams: streams}
@@ -1702,7 +1703,7 @@ func (s *Server) jsStreamNamesRequest(sub *subscription, c *client, _ *Account, 
 	s.sendAPIResponse(ci, acc, subject, reply, string(msg), s.jsonResponse(resp))
 }
 
-// Request for the list of all detailed stream info.
+// Request for the list of all detailed stream info. The function is called
 // TODO(dlc) - combine with above long term
 func (s *Server) jsStreamListRequest(sub *subscription, c *client, _ *Account, subject, reply string, rmsg []byte) {
 	if c == nil || !s.JetStreamEnabled() {
